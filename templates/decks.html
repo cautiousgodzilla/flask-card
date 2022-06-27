@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>  
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">      
+        <title>Cards</title>
+    </head>
+    <div class="text-center"><h1 class="h1">Cards</h1></div>
+    {% if lent == 0 %}
+    <div class="text-center"><div class="lead"><p>No cards found</p></div></div>
+    
+    {% else %}
+        <div class="text-center">    
+        <table id = "all-cards" class="table" >
+            <tr>
+            <th scope="col">SNo</th>
+            <th scope="col">Front</th>
+            <th scope="col">Back</th>
+            <th scope="col">Next Review</th>
+            <th scope="col">Actions</th>  
+            </tr>
+                {% for card in deck %}
+                    <tr scope="row">
+                    <td>{{loop.index}}</td>
+                    <td>{{card.front}}</a></td>
+                    <td>{{card.back}}</td>
+                    <td>{{card.time}}</td>
+                    <td>
+                    <a class="btn btn-primary" role="button" href="/{{user_id}}/{{deck_id}}/{{card.card_id}}/update" type="button">Update</a>
+                    <a class="btn btn-primary" role="button" href="/{{user_id}}/{{deck_id}}/{{card.card_id}}/delete" type="button">Delete</a>
+                    </td> 
+                    </tr>
+                </div>
+                {% endfor %}
+                <br>
+            </table>
+        {% endif %}
+        <div style="text-align: center;"><a href="/{{user_id}}/{{deck_id}}/create_card">+ Add Card</a></div>  
+        <div style="text-align: center;"><a href = '/dashboard/{{user_id}}'>Go Back</a></div>
+   
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">      
+        <title>Review Cards</title> 
+        <script type="text/javascript" src="{{url_for('static', filename='js/flashreview.js') }}"></script>
+    </head>   
+    <div class="text-center">
+        <h1 class="h1">Review Cards</h1>
+        {% if lent == 0 %}
+        <div class="lead"><p>No cards found</p></div>
+        
+        {% else %}
+        <table id = "Review Cards"  class="table">
+            <tr>
+            <th scope="col">Front</th>
+            <th scope="col">Back</th>
+            <th scope="col">Difficulty</th>
+            </tr>
+                {% for card in cards %}
+                    <tr scope="row">
+                        <td>{{card.front}}</a></td>
+                        <td>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="showans('{{loop.index}}')" id="ansbutton{{loop.index}}">Show Answer</button>
+                            <div id="answer{{loop.index}}" style="display:none">{{card.back}}</div>
+                        </td>
+                        <td>
+                            <form action="/{{user_id}}/{{deck_id}}/review" method="POST" id="difficulty">
+                                <input type="hidden" name="card_id{{loop.index}}" value="{{card.card_id}}" />
+                                <div>
+                                    <input class="radio-inline"  type="radio" name="diff{{loop.index}}" value="1" />
+                                    <label class="form-label">Hard</label>
+                                    <input class="radio-inline"  type="radio" name="diff{{loop.index}}" value="2" />
+                                    <label class="form-label">Medium</label>
+                                    <input class="radio-inline"  type="radio" name="diff{{loop.index}}" value="3" />
+                                    <label class="form-label">Easy</label>
+                                    
+                                </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <br>
+            </table>
+            <input class="btn btn-primary"  type="submit" value = "Submit"></form>
+        {% endif %}    
+        </div>
+        <div style="text-align: center;"><a href = '/dashboard/{{user_id}}'>Go Back</a></div>
+   
+
+</html>

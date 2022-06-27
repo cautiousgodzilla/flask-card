@@ -1,0 +1,460 @@
+openapi: 3.0.0
+info:
+  title: Flask Flashcard Project
+  description: >
+    <div>This is a YAML file specifying the API methods and their respective responses for the Flashcard App. 
+    </div>
+
+    <h3> Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Resource</th>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Deck</td>
+        <td>TOPIC100</td>
+        <td>Topic is should be string.</td>
+      </tr>
+     
+      <tr>
+        <td>Card</td>
+        <td>CARD001</td>
+        <td>Front Card required and should be String </td>
+      </tr>
+      <tr>
+        <td>Card</td>
+        <td>CARD002</td>
+        <td>Back Card is required and should be String </td>
+      </tr>
+    </tbody>
+    </table>
+
+  version: 1.0.0
+servers:
+  - url: http://192.168.1.101:8080/
+paths:
+  /api/{user_id}:
+    description: Retrieves all the decks made by the User.
+    get:
+      description: Operation to Read Decks resource.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: user object
+                type: object
+                properties:
+                  deck_id:
+                    type: object
+                    example: { "topic": Tamil, "last_review":'2021-11-28'}
+        '500':
+          description: Internal Server Error
+        '404':
+          description: User not found
+
+    put:
+      description: Change Topic/Name of the deck.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: string
+                  example: Tamil
+      responses:
+        '200':
+          description: Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                    example: Tamil
+
+        '404':
+          description: Deck not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+    post:
+      description: Operation to create a deck.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: string
+                  example: Hindi
+      responses:
+        '201':
+          description: Deck Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                    example: Hindi
+
+        '409':
+          description: Deck already exist
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/{user_id}/{deck_id}:
+    description: Url to read, update and delete cards within decks.
+    get:
+      description: Operation to read all cards in a deck
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+        - in: path
+          name: deck_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: deck object
+                type: object
+                properties:
+                  front:
+                    type: string
+                    example: Cat
+                  back:
+                    type: string
+                    example: Poone
+                  interval:
+                    type: integer
+                    example: 1
+                  time:
+                    type: string
+                    example: '2021-11-28'
+        '500':
+          description: Internal server error
+        '404':
+          description: Decks not found
+
+    delete:
+      description: Operation to delete the Deck.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: deck_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Deck not found
+
+
+    post:
+      description: Operation to create the Deck
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: deck_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                front:
+                  type: string
+                  example: Cat
+                bank:
+                  type: string
+                  example: Billi
+
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  front:
+                    type: string
+                    example: Cat
+                  back:
+                    type: string
+                    example: Billi
+
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/{user_id}/{deck_id}/{card_id}:
+    description: Reads, Modifies and Deletes individual cards in decks.
+    get:
+      description: Reads individual Cards in Decks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: deck_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    card_id:
+                      type: integer
+                      example: 1
+                    front:
+                      type: string
+                      example: Cat
+                    back:
+                      type: string
+                      example: Billi
+                    time:
+                      type: string
+                      example: 2021-11-28
+                    interval:
+                      type: integer
+                      example: 1
+        '400':
+          description: Invalid Card Id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '500':
+          description: Internal Server Error
+    put:
+      description: Updates individual Cards in Decks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: deck_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    card_id:
+                      type: integer
+                      example: 1
+                    front:
+                      type: string
+                      example: Cat
+                    back:
+                      type: string
+                      example: Billi
+                    time:
+                      type: string
+                      example: 2021-11-28
+                    interval:
+                      type: integer
+                      example: 1
+        '400':
+          description: Invalid Card Id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '500':
+          description: Internal Server Error
+    delete:
+      description: Deletes individual Cards in Decks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: deck_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    card_id:
+                      type: integer
+                      example: 1
+                    front:
+                      type: string
+                      example: Cat
+                    back:
+                      type: string
+                      example: Billi
+                    time:
+                      type: string
+                      example: 2021-11-28
+                    interval:
+                      type: integer
+                      example: 1
+        '400':
+          description: Invalid Card Id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '500':
+          description: Internal Server Error
+
+
